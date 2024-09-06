@@ -13,6 +13,7 @@ export default function Banner() {
   const [isPriceOpen, setIsPriceOpen] = useState(false);
   const [priceRange, setPriceRange] = useState([100000, 500000]);
   const [isHovered, setIsHovered] = useState(false);
+  const [animationStep, setAnimationStep] = useState(0);
 
   const slides = [
     {
@@ -40,7 +41,12 @@ export default function Banner() {
 
   useEffect(() => {
     const interval = setInterval(() => {
-      setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
+      setCurrentSlide((prevSlide) => {
+        const newSlide = (prevSlide + 1) % slides.length;
+        // Reset animation step when changing slide
+        setAnimationStep(0);
+        return newSlide;
+      });
     }, 5000);
     return () => clearInterval(interval);
   }, [slides.length]);
@@ -58,12 +64,30 @@ export default function Banner() {
   const priceRef = useRef(null);
 
   const goToNextSlide = () => {
-    setCurrentSlide((prevSlide) => (prevSlide + 1) % slides.length);
+    setCurrentSlide((prevSlide) => {
+      const newSlide = (prevSlide + 1) % slides.length;
+      // Reset animation step when changing slide
+      setAnimationStep(0);
+      return newSlide;
+    });
   };
 
   const goToPreviousSlide = () => {
-    setCurrentSlide((prevSlide) => (prevSlide - 1 + slides.length) % slides.length);
+    setCurrentSlide((prevSlide) => {
+      const newSlide = (prevSlide - 1 + slides.length) % slides.length;
+      // Reset animation step when changing slide
+      setAnimationStep(0);
+      return newSlide;
+    });
   };
+
+  useEffect(() => {
+    // Animation delay handling
+    const timer = setTimeout(() => {
+      setAnimationStep(1); // Start revealing text after 1.5s
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, [currentSlide]);
 
   return (
     <div
@@ -80,10 +104,10 @@ export default function Banner() {
             style={{ backgroundImage: `url(${slide.image})`, backgroundSize: "cover", backgroundPosition: "center" }}
           >
             {/* Text and Button */}
-            <div className={`absolute ${slide.textPosition === 'center' ? 'top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2' : 'top-1/3 left-10'} text-white text-center ${currentSlide === index ? "animate-slideIn" : ""}`}>
-              <h2 className="text-5xl font-bold mb-4 animate-fadeInDelay1">{slide.text}</h2>
-              <p className="text-lg mb-6 animate-fadeInDelay2">{slide.description}</p>
-              <button className="bg-[#aa8453] hover:bg-[#8d6e63] text-white font-bold py-2 px-6 rounded-lg animate-fadeInDelay3">{slide.buttonText}</button>
+            <div className={`absolute ${slide.textPosition === 'center' ? 'top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2' : 'top-1/3 left-10'} text-white text-center`}>
+              <h2 className={`text-5xl font-bold mb-4 ${animationStep === 1 ? "reveal-text" : "hide-text"} text-anim`}>{slide.text}</h2>
+              <p className={`text-lg mb-6 ${animationStep === 1 ? "reveal-text" : "hide-text"} text-anim`}>{slide.description}</p>
+              <button className={`bg-[#aa8453] hover:bg-[#8d6e63] text-white font-bold py-2 px-6 rounded-lg ${animationStep === 1 ? "reveal-text" : "hide-text"} text-anim`}>{slide.buttonText}</button>
             </div>
           </div>
         ))}

@@ -2,21 +2,28 @@ import React, { useState, useEffect } from 'react';
 import { FaPlus } from 'react-icons/fa';
 import { GoPlus } from 'react-icons/go';
 
-
 export default function Navbar() {
   const [openIndex, setOpenIndex] = useState(null);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
 
   const handleClickOutside = (e) => {
-    // Close submenu if click is outside the menu
     if (!e.target.closest('.navbar')) {
       setOpenIndex(null);
     }
   };
 
   useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 50); // Adjust this value to when you want the background color to change
+    };
+
     document.addEventListener('click', handleClickOutside);
+    window.addEventListener('scroll', handleScroll);
+
     return () => {
       document.removeEventListener('click', handleClickOutside);
+      window.removeEventListener('scroll', handleScroll);
     };
   }, []);
 
@@ -24,127 +31,95 @@ export default function Navbar() {
     setOpenIndex(index);
   };
 
+  const handleMenuToggle = () => {
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   const navLinks = (
     <>
-      <li className={`relative ${openIndex === 0 ? 'text-[#aa8453]' : 'hover:text-[#aa8453]'}`}>
-        <div
-          className="flex items-center cursor-pointer text-white font-semibold"
-          onMouseEnter={() => handleMouseEnter(0)}
+      {['Home', 'Listing', 'Features', 'Pages', 'Blog'].map((item, index) => (
+        <li
+          key={index}
+          className={`relative border-b border-gray-600 last:border-0 ${openIndex === index ? 'text-[#aa8453]' : 'hover:text-[#aa8453]'}`}
         >
-          Home
-          <FaPlus className="ml-2" />
-        </div>
-        {openIndex === 0 && (
-          <ul className="absolute left-0 top-full mt-2 bg-base-100 shadow-lg z-10 p-2 text-black">
-            <li className="hover:text-[#aa8453]"><a>Home 01</a></li>
-            <li className="hover:text-[#aa8453]"><a>Home 02</a></li>
-          </ul>
-        )}
-      </li>
-      <li className={`relative ${openIndex === 1 ? 'text-[#aa8453]' : 'hover:text-[#aa8453]'}`}>
-        <div
-          className="flex items-center cursor-pointer text-white font-semibold"
-          onMouseEnter={() => handleMouseEnter(1)}
-        >
-          Listing
-          <FaPlus className="ml-2" />
-        </div>
-        {openIndex === 1 && (
-          <ul className="absolute left-0 top-full mt-2 bg-base-100 shadow-lg z-10 p-2 text-black">
-            <li className="hover:text-[#aa8453]"><a>Property Grid</a></li>
-            <li className="hover:text-[#aa8453]"><a>Property List</a></li>
-          </ul>
-        )}
-      </li>
-      <li className={`relative ${openIndex === 2 ? 'text-[#aa8453]' : 'hover:text-[#aa8453]'}`}>
-        <div
-          className="flex items-center cursor-pointer text-white font-semibold"
-          onMouseEnter={() => handleMouseEnter(2)}
-        >
-          Features
-          <FaPlus className="ml-2" />
-        </div>
-        {openIndex === 2 && (
-          <ul className="absolute left-0 top-full mt-2 bg-base-100 shadow-lg z-10 p-2 text-black">
-            <li className="hover:text-[#aa8453]"><a>Single Property</a></li>
-            <li className="hover:text-[#aa8453]"><a>Left Filter Search</a></li>
-          </ul>
-        )}
-      </li>
-      <li className={`relative ${openIndex === 3 ? 'text-[#aa8453]' : 'hover:text-[#aa8453]'}`}>
-        <div
-          className="flex items-center cursor-pointer text-white font-semibold"
-          onMouseEnter={() => handleMouseEnter(3)}
-        >
-          Pages
-          <FaPlus className="ml-2" />
-        </div>
-        {openIndex === 3 && (
-          <ul className="absolute left-0 top-full mt-2 bg-base-100 shadow-lg z-10 p-2 text-black">
-            <li className="hover:text-[#aa8453]"><a>About Us</a></li>
-            <li className="hover:text-[#aa8453]"><a>Profile</a></li>
-          </ul>
-        )}
-      </li>
-      <li className={`relative ${openIndex === 4 ? 'text-[#aa8453]' : 'hover:text-[#aa8453]'}`}>
-        <div
-          className="flex items-center cursor-pointer text-white font-semibold"
-          onMouseEnter={() => handleMouseEnter(4)}
-        >
-          Blog
-          <FaPlus className="ml-2" />
-        </div>
-        {openIndex === 4 && (
-          <ul className="absolute left-0 top-full mt-2 bg-base-100 shadow-lg z-10 p-2 text-black">
-            <li className="hover:text-[#aa8453]"><a>Blog Grid</a></li>
-            <li className="hover:text-[#aa8453]"><a>Blog List</a></li>
-          </ul>
-        )}
-      </li>
-      <li className="text-white font-semibold"><a>Contact Us</a></li>
+          <div
+            className="flex items-center cursor-pointer text-white font-medium py-2"
+            onMouseEnter={() => handleMouseEnter(index)}
+          >
+            {item}
+            <FaPlus className="ml-2" />
+          </div>
+          {openIndex === index && (
+            <ul className="absolute left-0 top-full mt-2 bg-white shadow-lg z-10 p-2 text-black">
+              <li className="hover:text-[#aa8453]"><a>{item}  01</a></li>
+              <li className="hover:text-[#aa8453]"><a>{item}  02</a></li>
+            </ul>
+          )}
+        </li>
+      ))}
+      <li className="text-white font-medium py-2 border-b border-gray-600 hover:text-[#aa8453]"><a>Contact Us</a></li>
     </>
   );
 
   return (
-    <div className="navbar bg-transparent absolute py-14 px-10 top-0 left-0 w-full z-50">
-      <div className="navbar-start">
-        <a href="" className="text-white text-xl font-semibold">UNILAND <br />REAL ESTATE</a>
-        <div className="dropdown">
-          <div tabIndex={0} role="button" className="btn btn-ghost lg:hidden">
+    <div className={`navbar py-14 px-10 top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'fixed bg-gray-800' : 'absolute bg-transparent'}`}>
+      {/* Navbar Start */}
+      <div className="navbar-start flex items-center">
+        <a href="/" className="text-white text-xl font-bold">UNILAND <br /> <span className='text-sm'>REAL ESTATE</span></a>
+      </div>
+
+      {/* Navbar Center for Desktop */}
+      <div className="navbar-center hidden lg:flex">
+        <ul className="menu menu-horizontal flex space-x-6">
+          {navLinks}
+        </ul>
+      </div>
+
+      {/* Navbar End */}
+      <div className="navbar-end flex items-center space-x-4">
+        {/* Create Listing Button */}
+        <a className="btn border-0 text-white btn-warning bg-[#aa8453] hover:bg-[#cc7f1a] flex items-center hidden lg:flex">
+          <GoPlus className="mr-2" />
+          Create Listing
+        </a>
+
+        {/* Mobile Menu Button */}
+        <div className="lg:hidden relative pr-10">
+          <button className="btn btn-ghost" onClick={handleMenuToggle}>
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              className="h-5 w-5"
+              className="h-5 w-5 text-white"
               fill="none"
               viewBox="0 0 24 24"
               stroke="currentColor"
             >
-              <path
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                strokeWidth="2"
-                d="M4 6h16M4 12h8m-8 6h16"
-              />
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M4 6h16M4 12h8m-8 6h16" />
             </svg>
-          </div>
-          <ul
-            tabIndex={0}
-            className="menu menu-sm dropdown-content bg-base-100 rounded-box z-[1] mt-3 w-52 p-2 shadow"
-          >
-            {navLinks}
-          </ul>
+          </button>
         </div>
       </div>
-      <div className="navbar-center hidden lg:flex">
-        <ul className="menu menu-horizontal px-1">
-          {navLinks}
-        </ul>
-      </div>
-      <div className="navbar-end">
-        <a className="btn border-0 text-white btn-warning bg-[#aa8453] hover:bg-[#cc7f1a]">
-          <GoPlus className="mr-2" />
-          Create Listing
-        </a>
-      </div>
+
+      {/* Half-Screen Mobile Menu */}
+      {isMenuOpen && (
+        <div className="fixed inset-y-0 left-0 w-1/2 bg-black bg-opacity-90 text-white z-50 flex flex-col items-start p-6">
+          <button
+            className="text-white text-2xl focus:outline-none mb-4"
+            onClick={handleMenuToggle}
+          >
+            &times;
+          </button>
+          <a href="/" className="text-white text-sm font-bold mb-8">UNILAND<br />REAL ESTATE</a>
+          <ul className="space-y-4 text-sm font-medium">
+            {navLinks}
+            <li className="pt-4">
+              <a className="btn border-0 text-white btn-warning bg-[#aa8453] hover:bg-[#cc7f1a] flex items-center">
+                <GoPlus className="mr-2" />
+                Create Listing
+              </a>
+            </li>
+          </ul>
+        </div>
+      )}
     </div>
   );
 }
