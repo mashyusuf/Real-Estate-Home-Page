@@ -15,7 +15,7 @@ export default function Navbar() {
 
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50); // Adjust this value to when you want the background color to change
+      setIsScrolled(window.scrollY > 50); // Adjust this value as needed
     };
 
     document.addEventListener('click', handleClickOutside);
@@ -51,8 +51,8 @@ export default function Navbar() {
           </div>
           {openIndex === index && (
             <ul className="absolute left-0 top-full mt-2 bg-white shadow-lg z-10 p-2 text-black">
-              <li className="hover:text-[#aa8453]"><a>{item}  01</a></li>
-              <li className="hover:text-[#aa8453]"><a>{item}  02</a></li>
+              <li className="hover:text-[#aa8453]"><a>{item} 01</a></li>
+              <li className="hover:text-[#aa8453]"><a>{item} 02</a></li>
             </ul>
           )}
         </li>
@@ -62,7 +62,7 @@ export default function Navbar() {
   );
 
   return (
-    <div className={`navbar py-14 px-10 top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'fixed bg-gray-800' : 'absolute bg-transparent'}`}>
+    <div className={`navbar ${isScrolled ? 'py-4 px-6' : 'py-14 px-10'} top-0 left-0 w-full z-50 transition-all duration-300 ${isScrolled ? 'fixed bg-gray-800' : 'absolute bg-transparent'}`}>
       {/* Navbar Start */}
       <div className="navbar-start flex items-center">
         <a href="/" className="text-white text-xl font-bold">UNILAND <br /> <span className='text-sm'>REAL ESTATE</span></a>

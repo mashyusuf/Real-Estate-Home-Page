@@ -1,9 +1,9 @@
 import React from 'react';
 import Slider from 'react-slick';
-import { FaBed, FaBath, FaRulerCombined, FaCheckCircle } from 'react-icons/fa';
+import { FaBed, FaBath, FaRulerCombined, FaFireAlt } from 'react-icons/fa';
 import { BsFillHeartFill, BsShareFill, BsBookmarkFill } from 'react-icons/bs';
-import { FaFireAlt } from "react-icons/fa";
-export default function CardSection() {
+
+export default function PopularCard() {
   // Settings for the slider
   const settings = {
     dots: true,
@@ -13,9 +13,21 @@ export default function CardSection() {
     slidesToScroll: 1,
     autoplay: true,
     autoplaySpeed: 2000,
+    customPaging: i => (
+      <div
+        style={{
+          width: '10px',
+          height: '10px',
+          borderRadius: '50%',
+          backgroundColor: 'white',
+          margin: '0 5px',
+        }}
+      ></div>
+    ),
+    dotsClass: 'slick-dots custom-dots',
     responsive: [
       {
-        breakpoint: 1024, // For devices with width less than 1024px
+        breakpoint: 1024,
         settings: {
           slidesToShow: 3,
           slidesToScroll: 1,
@@ -24,14 +36,14 @@ export default function CardSection() {
         },
       },
       {
-        breakpoint: 768, // For devices with width less than 768px
+        breakpoint: 768,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
         },
       },
       {
-        breakpoint: 480, // For devices with width less than 480px
+        breakpoint: 480,
         settings: {
           slidesToShow: 1,
           slidesToScroll: 1,
@@ -85,11 +97,9 @@ export default function CardSection() {
   ];
 
   return (
-    <div className='px-10'>
-      <div className='flex justify-between mb-8'>
-        <h1 className='text-5xl font-bold'>Recent Properties</h1>
-        <p className='text-lg text-gray-600'>View All Properties</p>
-      </div>
+    <div className='mb-20 mt-20 bg-gray-900 py-20 px-20'>
+      <h1 className='text-5xl mb-10 text-center font-bold text-white'>Most Popular Property</h1>
+      <div className="divider w-1/6 mx-auto border-t border-[#aa8453] text-center my-4"></div>
       <Slider {...settings}>
         {fakeData.map((property, index) => (
           <div key={index} className='p-4'>
